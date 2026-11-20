@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read, Write, Update, Delete Data v9.x.x</title>
+    <style>
+        label {
+            display: inline-block;
+            width: 80px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <label>Name</label>
+    <input id="Namebox" type="text">
+
+    <label>RollNo</label>
+    <input id="Rollbox" type="text">
+
+    <label>Section</label>
+    <input id="Secbox" type="text">
+
+    <label>Name</label>
+    <select id="Genbox">
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+
+    <hr>
+
+    <button id="Insbtn">INSERT</button>
+    <button id="Selbtn">SELECT</button>
+    <button id="Updbtn">UPDATE</button>
+    <button id="Delbtn">DELETE</button>
+
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyD1xYhA1h0BAi-o5a2H0SW1DbQbBERGaww",
+    authDomain: "fire9db-b7020.firebaseapp.com",
+    databaseURL: "https://fire9db-b7020-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "fire9db-b7020",
+    storageBucket: "fire9db-b7020.firebasestorage.app",
+    messagingSenderId: "794714821296",
+    appId: "1:794714821296:web:34b86fe309ffe43c956175",
+    measurementId: "G-KWXGN0RT2S"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  import {
+    getFirestore, doc, getDoc, setDoc, collection, addDoc, deleteDoc, deleteField
+  }
+  from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+  const db = getFirestore();
+
+  let NameBox = document.getElementById("Namebox");
+let RollBox = document.getElementById("Rollbox");
+let SecBox = document.getElementById("Secbox");
+let GenBox = document.getElementById("Genbox");
+
+let insBtn = document.getElementById("Insbtn");
+let selBtn = document.getElementById("Selbtn");
+let updBtn = document.getElementById("Updbtn");
+let delBtn = document.getElementById("Delbtn");
+
+// --------- ADDING DOCUMENT --------- //
+
+async function AddDocument_AutoID() {
+    var ref = collection(db, "TheStudentsList");
+
+    const docRef = await addDoc(
+        ref,
+        {
+            NameOfStd: NameBox.value,
+            RollNo: RollBox.value,
+            Section: SecBox.value,
+            Gender: GenBox.value
+        }
+    )
+    .then(() => {
+        alert("data added successfully");
+    })
+    .catch((error) => {
+        alert("Unsuccessful operation, error: " + error);
+    });
+}
+
+async function GetADocument() {
+    var ref = doc(db, "TheStudentsList", RollBox.value);
+    const docSnap = await getDoc(ref);
+
+    if (docSnap.exists()) {
+        NameBox.value = docSnap.data().NameOfStd;
+        SecBox.value = docSnap.data().Section;
+        GenBox.value = docSnap.data().Gender;
+    }
+    else{
+        alert("No such Document");
+
+    }
+}
+
+async function UpdateFieldsInADocukent(){
+    
+}
+
+
+insBtn.addEventListener("click", AddDocument_CustomID);
+selBtn.addEventListener("click", GetADocument);
+
+
+
+  
+</script>
+
+</body>
+
+</html>
